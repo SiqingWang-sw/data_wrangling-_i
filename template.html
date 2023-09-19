@@ -364,6 +364,8 @@ display: none;
 ## ✖ dplyr::filter() masks stats::filter()
 ## ✖ dplyr::lag()    masks stats::lag()
 ## ℹ Use the conflicted package (&lt;http://conflicted.r-lib.org/&gt;) to force all conflicts to become errors</code></pre>
+<pre class="r"><code>library(readxl)
+library(haven)</code></pre>
 <p>Import the <code>FAS_litters.csv</code> csv using a relative path</p>
 <pre class="r"><code>litters_df =
   read_csv(&quot;data/FAS_litters.csv&quot;)</code></pre>
@@ -661,6 +663,65 @@ pups_df =
 </tr>
 </tbody>
 </table>
+</div>
+<div id="options-in-read_" class="section level2">
+<h2>Options in <code>read_*</code></h2>
+<pre class="r"><code>litters_df = 
+  read_csv(&quot;data/FAS_litters.csv&quot;,
+           skip = 10, col_names = FALSE)</code></pre>
+<pre><code>## Rows: 40 Columns: 8
+## ── Column specification ────────────────────────────────────────────────────────
+## Delimiter: &quot;,&quot;
+## chr (2): X1, X2
+## dbl (6): X3, X4, X5, X6, X7, X8
+## 
+## ℹ Use `spec()` to retrieve the full column specification for this data.
+## ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.</code></pre>
+<p>Look at NA values</p>
+<pre class="r"><code>litters_df = 
+  read_csv(&quot;data/FAS_litters.csv&quot;,
+           na = c(&quot;NA&quot;, 19))</code></pre>
+<pre><code>## Rows: 49 Columns: 8
+## ── Column specification ────────────────────────────────────────────────────────
+## Delimiter: &quot;,&quot;
+## chr (2): Group, Litter Number
+## dbl (6): GD0 weight, GD18 weight, GD of Birth, Pups born alive, Pups dead @ ...
+## 
+## ℹ Use `spec()` to retrieve the full column specification for this data.
+## ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.</code></pre>
+<p>Column types</p>
+<pre class="r"><code>litters_df = 
+  read_csv(&quot;data/FAS_litters.csv&quot;,
+           col_types = 
+             cols(
+               `GD0 weight` = col_character()
+             ))</code></pre>
+<p>##Other file types Import a xlsx file first</p>
+<pre class="r"><code>mlb_df = 
+  read_excel(&quot;data/mlb11.xlsx&quot;)</code></pre>
+<p>Import a SAS file</p>
+<pre class="r"><code>pulse_df = 
+  read_sas(&quot;data/public_pulse_data.sas7bdat&quot;)</code></pre>
+<p>##base R Don’t use read.csv, this creates a dataframe instead of a
+tibble</p>
+<pre class="r"><code>litters_df = 
+  read.csv(&quot;data/FAS_litters.csv&quot;)</code></pre>
+</div>
+<div id="export-data" class="section level2">
+<h2>Export data</h2>
+<pre class="r"><code>litters_df_cleaned = read_csv(&quot;data/FAS_litters.csv&quot;)</code></pre>
+<pre><code>## Rows: 49 Columns: 8
+## ── Column specification ────────────────────────────────────────────────────────
+## Delimiter: &quot;,&quot;
+## chr (2): Group, Litter Number
+## dbl (6): GD0 weight, GD18 weight, GD of Birth, Pups born alive, Pups dead @ ...
+## 
+## ℹ Use `spec()` to retrieve the full column specification for this data.
+## ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.</code></pre>
+<pre class="r"><code>litters_df_cleaned =
+  janitor::clean_names(litters_df_cleaned)
+
+write_csv(litters_df_cleaned, &quot;data/litters_cleaned.csv&quot;)</code></pre>
 </div>
 
 
