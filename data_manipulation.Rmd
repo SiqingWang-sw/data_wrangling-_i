@@ -5,8 +5,50 @@ output: github_document
 ```{r}
 library(tidyverse)
 ```
+```{r}
+litters_df = read_csv("data/FAS_litters.csv")
+litters_df = 
+  janitor::clean_names(litters_df)
 
+pups_df =
+  read_csv("data/FAS_pups.csv")
 
+pups_df = 
+  janitor::clean_names(pups_df)
+```
 
+## `select` is used to select columns!
+select doesn't change the original df unless you reassign it 
+```{r}
+select(litters_df, group, litter_number, gd0_weight)
+
+select(litters_df, gd0_weight, group)
+
+select(litters_df, group, gd0_weight:gd_of_birth) #select everything 
+
+select(litters_df, group, starts_with("pups"))
+
+select(litters_df, -litter_number) #select everything other than litter_number 
+
+select(litters_df, -starts_with("gd")) #select all var that DONT start with gd 
+
+select(litters_df, group, litter_id = litter_number) #rename litter number to litter id 
+
+select(litters_df, group, litter_id = litter_number, everything()) #rename litter number, keep everything else as is 
+
+select(litters_df, gd0_weight, everything()) 
+```
+
+##`select` vs. `pull`
+
+```{r}
+select(litters_df, group)
+pull(litters_df, group) #group now exists as a vector, not a df 
+```
+
+Learning Assessment: In the pups data, select the columns containing litter number, sex, and PD ears.
+```{r}
+select(pups_df, litter_number, sex, pd_ears)
+```
 
 
