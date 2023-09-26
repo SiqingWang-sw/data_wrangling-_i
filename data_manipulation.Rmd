@@ -51,4 +51,65 @@ Learning Assessment: In the pups data, select the columns containing litter numb
 select(pups_df, litter_number, sex, pd_ears)
 ```
 
+##`filter`
+get rid of rows using `filter()`
+
+```{r}
+filter(litters_df, group == "Con7") #only keep rows where group = con7 
+
+filter(litters_df, group != "Con7") #only keep rows where group is not con7 
+
+filter(litters_df, gd0_weight > 20)
+
+filter(litters_df, gd0_weight <= 20)
+
+filter(litters_df, group == "Con7" | group == "Con8") #keep rows where group is con7 or con8
+
+filter(litters_df, group %in% c("Con7", "Con8")) #keep rows where group is con7 or con8
+
+filter(litters_df, group %in% c("Con7", "Con8"), gd0_weight > 20)
+```
+what about missing rows
+
+```{r}
+drop_na(litters_df, gd0_weight)
+```
+
+
+##`mutate`
+this is used to add or change variables 
+
+```{r}
+mutate(litters_df, wt_gain = gd18_weight - gd0_weight)
+
+mutate(litters_df, group = str_to_lower(group))
+
+mutate(litters_df,
+       wt_gain = gd18_weight - gd0_weight,
+       group = str_to_lower(group)
+       )
+```
+
+## `arange`
+```{r}
+arrange(litters_df, gd0_weight)
+arrange(litters_df, group, gd0_weight) #arrange group in alphabetical order then gd0weight in numeric order
+```
+
+##`pipe`
+```{r}
+litters_df = 
+  read_csv("data/FAS_litters.csv") |> #shift command m for this piping
+  janitor::clean_names() |> 
+  select(-starts_with("pups")) |>  #piping doesn't need to specify df name 
+  mutate(
+    group = str_to_lower(group),
+    wt_gain = gd18_weight - gd0_weight
+  ) |> 
+    drop_na(wt_gain) |> 
+    arrange(group, wt_gain)
+```
+
+
+
 
